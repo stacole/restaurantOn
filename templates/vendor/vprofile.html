@@ -60,7 +60,7 @@
 																			<div class="drag-list">
 																				<div class="item-thumb">
 																					{% if profile.profile_picture %}
-																						<img class="thumbnail" src="{{profile.cover_phote.url}}" alt="">
+																						<img class="thumbnail" src="{{profile.cover_photo.url}}" alt="">
 																					{% else %}
 																						<img class="thumbnail" src="{% static 'images/default-cover.png' %}" alt="Logo">
 																					{% endif %}			
@@ -72,11 +72,11 @@
 																<div class="text-holder">
 																	<label>Update Cover Photo</label>
 																	<div class="upload-gallery">
-																		{{profile_form.cover_phote}}
+																		{{profile_form.cover_photo}}
 																	</div>
 																	
 																</div>
-																<label class="text-danger">{{ profile_form.cover_phote.errors }}</label>
+																<label class="text-danger">{{ profile_form.cover_photo.errors }}</label>
 															</div>
 														</div>
 														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
