@@ -18,35 +18,46 @@
                 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                     <div class="user-dashboard loader-holder">
                         <div class="user-holder">
-                            <h5 class="text-uppercase">Build Your Food Menu</h5>
-                            <hr>
-                            <h6>Menu Categories</h6>
-                            {% if categories %}
-                                <a href="{% url 'add_food' %}" class="btn btn-success float-right m-1"><i class="fa fa-plus" aria-hidden="true"></i> Add Food</a>
-                                <a href="{% url 'add_category' %}" class="btn btn-info float-right m-1"><i class="fa fa-plus" aria-hidden="true"></i> Add Category</a>
+                            <h5 class="text-uppercase">Build your Food Menu</h5>
+                            <!-- Tables build menu Start -->
+                                <hr>
+                                <h6>Menu food</h6>
+                                <a href="#" class="btn btn-success float-right m-1"><i class="fa fa-plus" aria-hidden="true"></i> Add Food</a>
+                                <a href="#" class="btn btn-info float-right m-1"><i class="fa fa-plus" aria-hidden="true"></i> Add Menu</a>
+								
                                 <table class="table table-hover table-borderless">
-                                    
+                                    <!-- <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">First</th>
+                                        <th scope="col">Last</th>
+                                        <th scope="col">Handle</th>
+                                      </tr>
+                                    </thead> -->
                                     <tbody>
-                                    {% for cat in categories %}
-                                        <tr>
+                                    {% for menu in menus %}
+                                      <tr>
                                         <td class="text-left">{{ forloop.counter }}</td>
                                         <td class="text-left">
-                                            <a href="{% url 'fooditems_by_category' cat.id %}"><p class="mb=0 font-weight-bold">{{ cat }}</p>
-                                            <small class="text-muted">{{ cat.description }}</small></a>
+                                            <a href="{% url 'fooditems_by_menu' menu.id %}">
+                                                <p class="mb-0 font-weight-bolt">{{ menu }}</p>
+                                                <small class="text-muted">{{ menu.description }}</small>
+                                            </a>
                                         </td>
+                                        <td>{{ menu.price }}</td>
+                                        <td>{{ menu.is_available }}</td>
+                                        <td class="text-left"><img src="{{ menu.image.url }}" width="40" alt="menu"></td>
                                         <td>
-                                            <a href="{% url 'edit_category' cat.id %}" style="color: unset;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                            &nbsp; &nbsp; &nbsp; &nbsp;
-                                            <a href="{% url 'delete_category' cat.id %}" onclick="return confirm('Are you sure you want to delet this category?')"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            &nbsp;
+                                            &nbsp;
+                                            <i class="fa fa-trash text-danger" aria-hidden="true"></i>
                                         </td>
-                                        </tr>
+                                      </tr>
                                     {% endfor %}
                                     </tbody>
-                                </table>
-                            {% else %}
-                                <h5 class="text-center">No categories found.</h5>
-                                <div class="text-center"><a href="{% url 'add_category' %}" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Add Category</a></div>
-                            {% endif %}
+                                  </table>
+							<!-- Tables build menu End -->
                         </div>
                     </div>
                 </div>

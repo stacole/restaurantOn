@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
+
+import vendor
 from . forms import VendorForm
 from accounts.forms import UserProfileForm
 
@@ -9,8 +11,13 @@ from django.contrib import messages
 # Metodos para que no de error al querer entrar a la pagina de perfil de Vendor sin estar logueado, redireccione a inicio. 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from accounts.views import check_role_vendor
+from menu.models import FoodItem, MenuRestaurant
 
 # Create your views here.
+
+def get_vendor(request):
+    vendor = Vendor.objects.get(user=request.user)
+    return vendor
 
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)
@@ -40,3 +47,25 @@ def vprofile(request):
         'vendor': vendor,
     }
     return render(request, 'vendor/vprofile.html', context)
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def menu_builder(request):
+    vendor = get_vendor(request)
+    menus = MenuRestaurant.objects.filter(vendor=vendor)
+    context = {
+        'menus': menus,
+    }
+    return render(request, 'vendor/menu_builder.html', context)
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def fooditems_by_menu(request, pk=None):
+    vendor = get_vendor(request)
+    menu = get_object_or_404(MenuRestaurant, pk=pk)
+    fooditems = FoodItem.objects.filter(vendor=vendor, menu=menu)
+    context = {
+        'fooditems': fooditems,
+        'menu': menu,
+    }
+    return render(request, 'vendor/fooditems_by_menu.html', context)
