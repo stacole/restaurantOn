@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
-import vendor
+from menu.forms import MenuForm
 from . forms import VendorForm
 from accounts.forms import UserProfileForm
 
@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from accounts.views import check_role_vendor
 from menu.models import FoodItem, MenuRestaurant
+from django.template.defaultfilters import slugify
 
 # Create your views here.
 
@@ -69,3 +70,27 @@ def fooditems_by_menu(request, pk=None):
         'menu': menu,
     }
     return render(request, 'vendor/fooditems_by_menu.html', context)
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def add_menu(request):
+    if request.method == 'POST':
+        form = MenuForm(request.POST)
+        if form.is_valid():
+            menu_name = form.cleaned_data['menu_name']
+            menu = form.save(commit=False)
+            menu.vendor = get_vendor(request)
+
+            # menu.save() # here the menu id will be generated
+            menu.slug = slugify(menu_name)
+            form.save()
+            messages.success(request, 'Menu added successfully!')
+            return redirect('menu_builder')
+        else:
+            print(form.errors)
+    else:
+        form = MenuForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'vendor/add_menu.html', context)
