@@ -13,10 +13,10 @@ urlpatterns = [
     path('menu-builder/menu/edit/<int:pk>/', views.edit_menu, name='edit_menu'),
     path('menu-builder/menu/delete/<int:pk>/', views.delete_menu, name='delete_menu'),
 
-    # # FoodItem CRUD
-    # path('menu-builder/food/add/', views.add_food, name='add_food'),
-    # path('menu-builder/food/edit/<int:pk>/', views.edit_food, name='edit_food'),
-    # path('menu-builder/food/delete/<int:pk>/', views.delete_food, name='delete_food'),
+    # FoodItem CRUD
+    path('menu-builder/food/add/', views.add_food, name='add_food'),
+    path('menu-builder/food/edit/<int:pk>/', views.edit_food, name='edit_food'),
+    path('menu-builder/food/delete/<int:pk>/', views.delete_food, name='delete_food'),
 
     # # Opening Hour CRUD
     # path('opening-hours/', views.opening_hours, name='opening_hours'),

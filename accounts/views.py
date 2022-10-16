@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.core.exceptions import PermissionDenied
 from vendor.models import Vendor
+from django.template.defaultfilters import slugify
 
 
 
@@ -76,22 +77,24 @@ def registerUser(request):
 def registerVendor(request):
     if request.user.is_authenticated:
         messages.warning(request, 'You are already logged in!')
-        return redirect('dashboard')
+        return redirect('myAccount')
     elif request.method == 'POST':
         # Store the data and create the user
         form = UserForm(request.POST)
         v_form = VendorForm(request.POST, request.FILES)
-        if form.is_valid() and v_form.is_valid:
+        if form.is_valid() and v_form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = User.objects.create_user(first_name=first_name, last_name=last_name,username=username, email=email, password=password) 
-            user.role = User.VENDOR #Vendor viene de accounts.models
+            user.role = User.VENDOR #Vendor viene de accounts.models (1)
             user.save()
             vendor = v_form.save(commit=False)
             vendor.user = user
+    #         vendor_name = v_form.cleaned_data['vendor_name']
+    #         vendor.vendor_slug = slugify(vendor_name)+'-'+str(user.id)
             user_profile = UserProfile.objects.get(user=user) # from accounts.signals
             vendor.user_profile = user_profile
             vendor.save()

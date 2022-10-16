@@ -25,6 +25,7 @@ class Vendor(models.Model):
                 context = {
                     'user': self.user,
                     'is_approved': self.is_approved,
+                    'to_email': self.user.email,
                 }
                 if self.is_approved == True:
                     # Enviar correo de notificacion si hay cambios en el chekboox

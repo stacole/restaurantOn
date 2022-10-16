@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
-from menu.forms import MenuForm
+from menu.forms import MenuForm, FoodItemForm
 from . forms import VendorForm
 from accounts.forms import UserProfileForm
 
@@ -71,11 +71,11 @@ def fooditems_by_menu(request, pk=None):
     }
     return render(request, 'vendor/fooditems_by_menu.html', context)
 
-#@login_required(login_url='login')
-#@user_passes_test(check_role_vendor)
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
 def add_menu(request):
     if request.method == 'POST':
-        form = MenuForm(request.POST)
+        form = MenuForm(request.POST, request.FILES) # contiene imagen y requiere esto
         if form.is_valid():
             menu_name = form.cleaned_data['menu_name']
             menu = form.save(commit=False)
@@ -95,6 +95,8 @@ def add_menu(request):
     }
     return render(request, 'vendor/add_menu.html', context)
 
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
 def edit_menu(request, pk=None):
     menu = get_object_or_404(MenuRestaurant, pk=pk)
     if request.method == 'POST':
@@ -119,8 +121,72 @@ def edit_menu(request, pk=None):
     }
     return render(request, 'vendor/edit_menu.html', context)
 
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
 def delete_menu(request, pk=None):
     menu = get_object_or_404(MenuRestaurant, pk=pk)
     menu.delete()
     messages.success(request, 'Menu has been delete successfully!')
     return redirect('menu_builder')
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def add_food(request):
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES) # contiene imagen y requiere esto
+        if form.is_valid():
+            foodtitle = form.cleaned_data['food_title']
+            food = form.save(commit=False)
+            food.vendor = get_vendor(request)
+
+            # food.save() # here the food id will be generated
+            food.slug = slugify(foodtitle)
+            form.save()
+            messages.success(request, 'Foof Item added successfully!')
+            return redirect('fooditems_by_menu', food.menu.id)
+        else:
+            print(form.errors)
+    else:
+       form = FoodItemForm()
+       # Modificando categorias al agregar food a un menu desde otro usuario.
+       form.fields['menu'].queryset = MenuRestaurant.objects.filter(vendor=get_vendor(request))
+    context = {
+        'form': form,
+    }
+    return render(request, 'vendor/add_food.html', context)
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def edit_food(request, pk=None):
+    food = get_object_or_404(FoodItem, pk=pk)
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES,  instance=food)
+        if form.is_valid():
+            foodtitle = form.cleaned_data['food_title']
+            food = form.save(commit=False)
+            food.vendor = get_vendor(request)
+
+            # food.save() # here the food id will be generated
+            food.slug = slugify(foodtitle)
+            form.save()
+            messages.success(request, 'Food Item updated successfully!')
+            return redirect('fooditems_by_menu', food.menu.id)
+        else:
+            print(form.errors)
+    else:
+        form = FoodItemForm(instance=food) # esto rellena el formulario automaticamente para editarlo.
+        # Modificando categorias al agregar food a un menu desde otro usuario.
+        form.fields['menu'].queryset = MenuRestaurant.objects.filter(vendor=get_vendor(request))
+    context = {
+        'form': form,
+        'food': food, # Esta instancia se le pasa al form en edit_food.html porque en vendor/urls.py se solicita el primary key en el url
+    }
+    return render(request, 'vendor/edit_food.html', context)
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def delete_food(request, pk=None):
+    food = get_object_or_404(FoodItem, pk=pk)
+    food.delete()
+    messages.success(request, 'Food Item has been delete successfully!')
+    return redirect('fooditems_by_menu', food.menu.id)
