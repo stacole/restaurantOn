@@ -13,3 +13,9 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(UserProfile)
+
+# Titulo de la pagina en el portal administrador
+
+admin.site.site_header = "Thompson Hotels"
+admin.site.site_title = "Restaurant Administrator"
+admin.site.index_title = "Welcome to Admin portal"
