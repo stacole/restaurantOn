@@ -86,3 +86,24 @@ def decrease_cart(request, menu_id):
             return JsonResponse({'status': 'Failed', 'message': 'Invalide reques!'})
     else:
         return JsonResponse({'status': 'login_required', 'message': 'Please login to continue'})
+
+def cart(request):
+    cart_menus = Cart.objects.filter(user=request.user)
+    context = {
+        'cart_menus': cart_menus,
+    }
+    return render(request, 'marketplace/cart.html', context)
+
+def delete_cart(request, cart_id):
+    if request.user.is_authenticated:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            try:
+                # Verificar si existen menus en el carrito
+                cart_menu = Cart.objects.get(user=request, id=cart_id)
+                if cart_menu:
+                    cart_menu.delete()
+                    return JsonResponse({'status': 'Success', 'message': 'Cart menu has been deleted!', 'cart_counter': get_cart_counter(request)})
+            except:
+                return JsonResponse({'status': 'Failed', 'message': 'Cart menu does not exist!'})    
+        else:
+            return JsonResponse({'status': 'Failed', 'message': 'Invalide reques!'})
