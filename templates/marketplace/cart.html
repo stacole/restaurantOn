@@ -19,30 +19,35 @@
                         <div class="tab-content">
                             <div id="home" class="tab-pane in active">
                                 <div class="menu-itam-holder">
-                                    
+                                    <div class="text-center p-5" id="empty-cart" style="display: none;">
+                                        <h3>
+                                            Cart Is Empty
+                                        </h3>
+                                    </div>
                                     <div id="menu-item-list-6272" class="menu-itam-list">
-                                        
-                                        
                                         <ul>
                                             {% if cart_menus %}
                                                 {% for menu in cart_menus %}
-                                                <li>
+                                                <li id="cart-menu-{{menu.id}}">
                                                     <div class="image-holder"> <img src="{{ menu.menu.image.url }}" alt=""></div>
                                                     <div class="text-holder">
                                                         <h6>{{ menu.menu }}</h6>
                                                         <span>{{ menu.menu.description }}</span>
+                                                        <a href="{% url 'vendor_detail' menu.menu.vendor.vendor_slug %}" class="badge badge-warning">
+                                                            {{ menu.menu.vendor }}
+                                                        </a>
                                                     </div>
                                                     <div class="price-holder">
                                                         <span class="price">${{ menu.menu.price }}</span>
                                                 
-                                                        <a href="#" class="decrease_cart" data-id="{{ menu.menu.id }}" data-url="{% url 'decrease_cart' menu.menu.id %}" style="margin-right: 28px;">
+                                                        <a href="#" class="decrease_cart" data-id="{{ menu.menu.id }}" id="{{menu.id}}" data-url="{% url 'decrease_cart' menu.menu.id %}" style="margin-right: 28px;">
                                                             <i class="icon-minus text-color"></i>
                                                         </a>
                                                         <label id="qty-{{menu.menu.id}}">0</label>
                                                         <a href="#" class="add_to_cart" data-id="{{ menu.menu.id }}" data-url="{% url 'add_to_cart' menu.menu.id %}">
                                                             <i class="icon-plus4 text-color"></i>
                                                         </a>
-                                                        <a href="#" class="delete_cart" data-id="{{ menu.menu.id }}" data-url="{% url 'add_to_cart' menu.menu.id %}">
+                                                        <a href="#" class="delete_cart" data-id="{{ menu.id }}" data-url="{% url 'delete_cart' menu.id %}">
                                                             <i class="icon-delete text-color"></i>
                                                         </a>
                                                         
@@ -88,21 +93,21 @@
                                                 Subtotal
                                                 <span class="price float-right">
                                                     <span class="currency">$</span>
-                                                    <span id="subtotal">0</span>
+                                                    <span id="subtotal">{{ subtotal }}</span>
                                                 </span>
                                             </li>
                                             <li style="list-style-type: none;">
                                                 Iva
                                                 <span class="price float-right">
                                                     <span class="currency">$</span>
-                                                    <span id="iva">0</span>
+                                                    <span id="iva">{{ iva }}</span>
                                                 </span>
                                             </li>
                                             <li style="list-style-type: none; font-weight: 600;">
                                                 Total
                                                 <span class="price float-right">
                                                     <span class="currency">$</span>
-                                                    <span id="total">0</span>
+                                                    <span id="total">{{ grand_total }}</span>
                                                 </span>
                                             </li>
                                         </ul>

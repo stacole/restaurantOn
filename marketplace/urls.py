@@ -10,5 +10,5 @@ urlpatterns = [
     # Restando al carrito
     path('decrease_cart/<int:menu_id>/', views.decrease_cart, name='decrease_cart'),
     # Borrado de carro
-    path('delete_cart/<int:cat_id>/', views.delete_cart, name='delete_cart'),
+    path('delete_cart/<int:cart_id>/', views.delete_cart, name='delete_cart'),
 ]

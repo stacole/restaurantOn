@@ -91,6 +91,13 @@ $(document).ready(function(){
                 }else{
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     $('#qty-'+menu_id).html(response.qty);
+
+                    // subtotal, iva y total, tambien esta en marketplace.contextprocessors.py
+                    applyCartAmounts(
+                        response.cart_amount['subtotal'],
+                        response.cart_amount['iva'],
+                        response.cart_amount['grand_total']
+                    )
                 }
             }
         })
@@ -108,6 +115,7 @@ $(document).ready(function(){
         e.preventDefault();
         menu_id = $(this).attr('data-id');
         url = $(this).attr('data-url');
+        cart_id = $(this).attr('id');
         
         $.ajax({
             type: 'GET',
@@ -123,9 +131,77 @@ $(document).ready(function(){
                 }else{
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     $('#qty-'+menu_id).html(response.qty);
+
+                    applyCartAmounts(
+                        response.cart_amount['subtotal'],
+                        response.cart_amount['iva'],
+                        response.cart_amount['grand_total']
+                    )
+                    
+                    if(window.location.pathname == '/cart/'){
+                        removeCartMenu(response.qty, cart_id);
+                        checkEmptyCart();
+                    }
                 }
                 
             }
         })
     })
+
+    // Borrar menu del carrito
+    $('.delete_cart').on('click', function(e){
+        e.preventDefault();
+
+        cart_id = $(this).attr('data-id');
+        url = $(this).attr('data-url');
+        
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function(response){
+                console.log(response)
+                if(response.status == 'Failed'){
+                    swal(response.message, '', 'error')
+                }else{
+                    $('#cart_counter').html(response.cart_counter['cart_count']);
+                    swal(response.status, response.message, "success")
+
+                    applyCartAmounts(
+                        response.cart_amount['subtotal'],
+                        response.cart_amount['iva'],
+                        response.cart_amount['grand_total']
+                    )
+
+                    removeCartMenu(0, cart_id);
+                    checkEmptyCart();
+                }
+                
+            }
+        })
+    })
+
+    // Eliminar elementos del menu si la cantidad es 0
+    function removeCartMenu(cartMenuQty, cart_id){
+            if(cartMenuQty <= 0){
+                // remover el elemento menu
+                document.getElementById("cart-menu-"+cart_id).remove()
+            }
+    }
+
+    // checar si el carro está vació. 
+    function checkEmptyCart(){
+        var cart_counter = document.getElementById('cart_counter').innerHTML
+        if(cart_counter == 0){
+            document.getElementById("empty-cart").style.display = "block";
+        }
+    }
+
+    // aplicando cargos al carrito
+    function applyCartAmounts(subtotal, iva, grand_total){
+        if(window.location.pathname == '/cart/'){
+            $('#subtotal').html(subtotal)
+            $('#iva').html(iva)
+            $('#total').html(grand_total)
+        }
+    }
 });
