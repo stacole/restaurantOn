@@ -26,10 +26,21 @@
                                     Back
                                 </button>
                                 <br><br>
-                                <h6>Menu: <span class="text-uppercase text-success">{{menu}}</span> </h6>
-                                
+                                <h6>
+                                    Menu: 
+                                    <span class="text-uppercase text-success">
+                                        {{menu}}
+                                    </span>
+                                </h6>
+                                <!-- {% if fooditems %}
+                                    <a href="{% url 'add_food' %}" class="btn btn-success" style="float: right;">
+                                        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add food
+                                    </a>
+                                {% endif %}
+                                 -->
 								{% if fooditems %}
                                     <table class="table table-hover table-borderless">
+
                                         <!-- <thead>
                                         <tr>
                                             <th scope="col">#</th>

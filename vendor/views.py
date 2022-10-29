@@ -81,9 +81,10 @@ def add_menu(request):
             menu = form.save(commit=False)
             menu.vendor = get_vendor(request)
 
-            # menu.save() # here the menu id will be generated
-            menu.slug = slugify(menu_name)
-            form.save()
+            menu.save() # here the menu id will be generated
+            #form.save()
+            menu.slug = slugify(menu_name)+'-'+str(menu.id) # pizza-18
+            menu.save()
             messages.success(request, 'Menu added successfully!')
             return redirect('menu_builder')
         else:
@@ -140,8 +141,11 @@ def add_food(request):
             food.vendor = get_vendor(request)
 
             # food.save() # here the food id will be generated
-            food.slug = slugify(foodtitle)
-            form.save()
+            
+            food.save() # here the food id will be generated
+            #form.save()
+            food.slug = slugify(foodtitle)+'-'+str(food.id) # pizza-18
+            food.save()
             messages.success(request, 'Foof Item added successfully!')
             return redirect('fooditems_by_menu', food.menu.id)
         else:

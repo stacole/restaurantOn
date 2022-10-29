@@ -80,7 +80,7 @@ def registerVendor(request):
         return redirect('myAccount')
     elif request.method == 'POST':
         # Store the data and create the user
-        form = UserForm(request.POST)
+        form = UserForm(request.POST, request.FILES)
         v_form = VendorForm(request.POST, request.FILES)
         if form.is_valid() and v_form.is_valid():
             first_name = form.cleaned_data['first_name']

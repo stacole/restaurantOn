@@ -56,6 +56,10 @@
                                             <!-- <span class="post-categories"><span>Type of food :
                                                 </span> Apple
                                                 Juice</span> -->
+                                            <br>
+                                            {% if source_location %}
+                                                <span><small><b>{{vendor.kms}}</b> km away from {{source_location}}</small></span>
+                                            {% endif %}
                                             
                                         </div>
                                         <div class="list-option">

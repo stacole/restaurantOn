@@ -2915,7 +2915,7 @@ a.slicknav_btn.slicknav_open .slicknav_icon-bar:first-child { position: absolute
 #footer { background: #282c35; }
 .footer-widget { padding: 66px 0 40px; }
 /* News Letter style */
-.footer-widget .widget-newsletter { text-align: center; border-bottom: 1px solid #22252d; }
+.footer-widget .widget-newsletter { text-align: center; border-bottom: 1px solid #062a30; }
 .footer-widget .widget-newsletter .fieldset { margin: 0 auto; width: 700px; }
 #footer .footer-widget .widget-newsletter .widget-title h5 { font-size: 20px !important; margin-bottom: 0; text-transform: uppercase !important; color: #adb0b6 !important; font-weight: 700 !important; }
 ::-moz-placeholder { opacity: 1; }

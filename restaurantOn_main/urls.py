@@ -29,5 +29,7 @@ urlpatterns = [
     
     # Carrito
     path('cart/', MarketplaceViews.cart, name='cart'),
+    # Buscar
+    path('search/', MarketplaceViews.search, name='search'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

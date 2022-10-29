@@ -2100,7 +2100,7 @@ color:#2d2d2d !important;
 }	    .section-sidebar .widget-title h3, .section-sidebar .widget-title h4, .section-sidebar .widget-title h5, .section-sidebar .widget-title h6{
 color:#2d2d2d !important;
 }
-#footer .footer-widget { background-color:#282C35 !important; }
+#footer .footer-widget { background-color:#062a30 !important; }
 #footer .footer-widget p, .custom-container
 {color:#cdcdcd !important;}
 #footer.modern-v1 .cs-copyright p a,
@@ -2122,9 +2122,9 @@ color:#cdcdcd !important;
 color:#cdcdcd !important;
 }	    /*Footer Copyright Background Color*/
 #footer .copy-right,
-#footer.modern-v1 .cs-copyright {background-color:#282c35 !important;}
+#footer.modern-v1 .cs-copyright {background-color:#062a30 !important;}
 #footer .copyright-sec,
-#footer.modern-v1 .cs-copyright {background-color:#282c35 !important;}
+#footer.modern-v1 .cs-copyright {background-color:#062a30 !important;}
 
 /* COLOR END */
 
