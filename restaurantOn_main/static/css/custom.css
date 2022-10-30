@@ -33,3 +33,15 @@
 #footer {
     background: #282c35;
 }
+
+table > tbody > tr > td{
+    border: none !important;
+}
+/* Anchura deel fomrulario de horario */
+#opening_hours select{
+    padding: 5px 10px !important;
+}
+/* Anchura del boton del formulario de horario */
+.btn-success.add_hour{
+    padding: 7px 15px 7px 15px !important;
+}
