@@ -86,16 +86,16 @@ $(document).ready(function(){
                     swal(response.message, '', 'info').then(function(){
                         window.location = '/login';
                     })
-                }if(response.status == 'Failed'){
+                }else if(response.status == 'Failed'){
                     swal(response.message, '', 'error')
                 }else{
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     $('#qty-'+menu_id).html(response.qty);
 
-                    // subtotal, iva y total, tambien esta en marketplace.contextprocessors.py
+                    // subtotal, tax y total, tambien esta en marketplace.contextprocessors.py
                     applyCartAmounts(
                         response.cart_amount['subtotal'],
-                        response.cart_amount['iva'],
+                        response.cart_amount['tax_dict'],
                         response.cart_amount['grand_total']
                     )
                 }
@@ -134,7 +134,7 @@ $(document).ready(function(){
 
                     applyCartAmounts(
                         response.cart_amount['subtotal'],
-                        response.cart_amount['iva'],
+                        response.cart_amount['tax_dict'],
                         response.cart_amount['grand_total']
                     )
                     
@@ -168,7 +168,7 @@ $(document).ready(function(){
 
                     applyCartAmounts(
                         response.cart_amount['subtotal'],
-                        response.cart_amount['iva'],
+                        response.cart_amount['tax_dict'],
                         response.cart_amount['grand_total']
                     )
 
@@ -197,11 +197,16 @@ $(document).ready(function(){
     }
 
     // aplicando cargos al carrito
-    function applyCartAmounts(subtotal, iva, grand_total){
+    function applyCartAmounts(subtotal, tax_dict, grand_total){
         if(window.location.pathname == '/cart/'){
             $('#subtotal').html(subtotal)
-            $('#iva').html(iva)
             $('#total').html(grand_total)
+
+            for(key1 in tax_dict){
+                for(key2 in tax_dict[key1]){
+                    $('#tax-'+key1).html(tax_dict[key1][key2])
+                }
+            }
         }
     }
     // agregar horas de apertura
