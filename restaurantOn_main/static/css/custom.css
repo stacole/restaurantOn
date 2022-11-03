@@ -45,3 +45,8 @@ table > tbody > tr > td{
 .btn-success.add_hour{
     padding: 7px 15px 7px 15px !important;
 }
+
+.container-fluid{
+    /* background-color: #102A31 !important; */
+    background: url("static/logo/pattern.png") 50% 0 no-repeat fixed;
+}

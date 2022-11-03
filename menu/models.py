@@ -40,3 +40,4 @@ class FoodItem(models.Model):
 
     def __str__(self):
         return self.food_title
+        

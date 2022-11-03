@@ -31,5 +31,8 @@ urlpatterns = [
     path('cart/', MarketplaceViews.cart, name='cart'),
     # Buscar
     path('search/', MarketplaceViews.search, name='search'),
+
+    # Link para el botón CHECKOUT
+    path('checkout/', MarketplaceViews.checkout, name='checkout'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
