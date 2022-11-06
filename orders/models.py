@@ -7,7 +7,7 @@ from menu.models import MenuRestaurant
 class Payment(models.Model):
     # Seleccionar metodo de pago
     PAYMENT_METHOD = (
-        ('PayPal', 'Paypal'),
+        ('PayPal', 'PayPal'),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     transaction_id = models.CharField(max_length=100)
@@ -21,10 +21,10 @@ class Payment(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('New', 'New,'),
-        ('Accepted', 'Accepted,'),
-        ('Completed', 'Completed,'),
-        ('Cancelled', 'Cancelled,'),
+        ('New', 'New'),
+        ('Accepted', 'Accepted'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
     )
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -68,4 +68,5 @@ class OrderedMenu(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.menu_name
+        # Si le quito el str() marca error.
+        return str(self.menuitem)
