@@ -64,6 +64,8 @@ class OrderedMenu(models.Model):
     quantity = models.IntegerField()
     price = models.FloatField()
     amount = models.FloatField()
+    table = models.IntegerField(blank=True, null=True)
+    bracelet = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

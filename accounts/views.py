@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from vendor.models import Vendor
 from django.template.defaultfilters import slugify
+from orders.models import Order
 
 
 
@@ -170,7 +171,14 @@ def myAccount(request):
 @login_required(login_url='login')
 @user_passes_test(check_role_customer)
 def customerDashboard(request):
-    return render(request, 'accounts/customerDashboard.html')
+    orders = Order.objects.filter(user=request.user, is_ordered=True) # Muestra las ordenes en el perfil si son True [:5] es para mostrar 5 ordenes en el dashboard
+    recent_orders = orders[:5]
+    context = {
+        'orders': orders,
+        'orders_count': orders.count(),
+        'recent_orders': recent_orders,
+    }
+    return render(request, 'accounts/customerDashboard.html', context)
 
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)

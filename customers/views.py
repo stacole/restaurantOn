@@ -5,6 +5,8 @@ from accounts.models import UserProfile
 from accounts.views import login
 from accounts.forms import UserInfoForm, UserProfileForm
 from django.contrib import messages
+from orders.models import Order, OrderedMenu
+import simplejson as json
 
 # Create your views here.
 
@@ -32,3 +34,28 @@ def cprofile(request):
         'profile': profile,
     }
     return render(request, 'customers/cprofile.html', context)
+
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at') # ordenar por fecha orders.models.Order created_at
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'customers/my_orders.html', context)
+
+def order_detail(request, order_number):
+    try:
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_menu = OrderedMenu.objects.filter(order=order)
+        subtotal = 0
+        for menu in ordered_menu:
+            subtotal += (menu.price * menu.quantity)
+        tax_data = json.loads(order.tax_data)
+        context = {
+            'order': order,
+            'ordered_menu': ordered_menu,
+            'subtotal': subtotal,
+            'tax_data': tax_data,
+        }
+        return render(request, 'customers/order_detail.html', context)
+    except:
+        return redirect('customer')
