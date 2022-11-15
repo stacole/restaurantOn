@@ -8,11 +8,11 @@ from .models import Payment, Order, OrderedMenu
     # readonly_fields = ('order', 'payment', 'user', 'menuitem', 'quantity', 'price', 'amount')
     # extra = 0
 
-class OrderedMenuAdmin(admin.ModelAdmin):
-    readonly_fields = ('order', 'payment', 'user', 'menuitem', 'quantity', 'price', 'amount','table', 'bracelet')
+# class OrderedMenuAdmin(admin.ModelAdmin):
+#     readonly_fields = ('order', 'payment', 'user', 'menuitem', 'quantity', 'price', 'amount')
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['order_number', 'name', 'phone_number', 'email', 'total', 'payment_method', 'status', 'is_ordered']
+    list_display = ['order_number', 'name', 'phone_number', 'email', 'total', 'payment_method', 'status', 'order_placed_to', 'bracelet', 'table', 'is_ordered']
     # inlines = [OrderedMenuInline]
 
 admin.site.register(Payment)

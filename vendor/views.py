@@ -2,6 +2,7 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 from menu.forms import MenuForm, FoodItemForm
+from orders.models import Order, OrderedMenu
 from . forms import VendorForm, OpeningHourForm
 from accounts.forms import UserProfileForm
 
@@ -235,3 +236,17 @@ def remove_opening_hours(request, pk=None):
             hour = get_object_or_404(OpeningHour, pk=pk)
             hour.delete()
             return JsonResponse({'status': 'success', 'id': pk})
+
+def order_detail(request, order_number):
+    try:
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_menu = OrderedMenu.objects.filter(order=order, menuitem__vendor=get_vendor(request)) #Función get_vendor al principio de esta página
+        
+        context = {
+            'order': order,
+            'ordered_menu': ordered_menu,
+        }
+    except:
+        return redirect('vendor')
+
+    return render(request, 'vendor/order_detail.html', context)

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from marketplace.models import Cart
+from marketplace.models import Cart, Tax
 from marketplace.context_processors import get_cart_amounts
+from menu.models import MenuRestaurant
 from .forms import OrderForm
 from .models import Order, OrderedMenu, Payment
 import simplejson as json
@@ -17,6 +18,43 @@ def place_order(request):
     cart_count = cart_menus.count()
     if cart_count <= 0:
         return redirect('marketplace')
+
+    vendors_ids = []
+    for i in cart_menus:
+        if i.menu.vendor.id not in vendors_ids:
+            vendors_ids.append(i.menu.vendor.id)
+    
+    # Esta función es de context_proccessors
+    get_tax = Tax.objects.filter(is_active=True)
+    subtotal = 0
+    k = {}
+    for i in cart_menus:
+        menu = MenuRestaurant.objects.get(pk=i.menu.id, vendor_id__in=vendors_ids)
+        v_id = menu.vendor.id
+        if v_id in k:
+            subtotal = k[v_id]
+            subtotal += (menu.price * i.quantity)
+            k[v_id] = subtotal
+        else:
+            subtotal = (menu.price * i.quantity)
+            k[v_id] = subtotal
+
+        # Calcular los datos de impuestos
+        total_data = {}
+        tax_dict = {}
+        for i in get_tax:
+            tax_type = i.tax_type
+            tax_percentage = i.tax_percentage
+            tax_amount = round((tax_percentage * subtotal)/100, 2)
+            tax_dict.update({tax_type: {str(tax_percentage) : str(tax_amount)}})
+        # construct total data
+        # {"vendor_id":{"subtotal":{"tax_type": {"tax_percentage": "tax_amount"}}}}
+        total_data.update({menu.vendor.id: {str(subtotal): str(tax_dict)}})
+
+
+        # tax = sum(x for key in tax_dict.values() for x in key.values())
+
+        # grand_total = subtotal + tax
 
     subtotal = get_cart_amounts(request)['subtotal']
     total_tax = get_cart_amounts(request)['tax']
@@ -39,11 +77,13 @@ def place_order(request):
             order.user = request.user
             order.total = grand_total
             order.tax_data = json.dumps(tax_data)
+            order.total_data = json.dumps(total_data)
             order.total_tax = total_tax
             order.payment_method = request.POST['payment_method']
             order.save() # Generación del order id/pk 
             order.order_number = generate_order_number(order.id)
             order.save() # Guarado de order id/pk con la fecha actual.
+            order.vendors.add(*vendors_ids)
             context = {
                 'order': order,
                 'cart_menus': cart_menus,
@@ -140,7 +180,7 @@ def order_complete(request):
             subtotal += (menu.price * menu.quantity)
 
         tax_data = json.loads(order.tax_data)
-        print(tax_data)
+        #print(tax_data)
         context = {
             'order': order,
             'ordered_menu': ordered_menu,
