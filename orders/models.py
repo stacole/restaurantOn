@@ -71,7 +71,7 @@ class Order(models.Model):
         subtotal = 0
         tax = 0
         tax_dict = {}
-        if self.total_data:
+        if self.total_data: # revisar porque no funciona sin el None
             total_data = json.loads(self.total_data)
             data = total_data.get(str(vendor.id))
             for key, val in data.items():
@@ -80,14 +80,15 @@ class Order(models.Model):
                 val = json.loads(val)
                 tax_dict.update(val)
 
-                # Calcular impuestos
+                # calculate tax
+                # {'CGST': {'9.00': '6.03'}, 'SGST': {'7.00': '4.69'}}
                 for i in val:
-                    for j in val [i]:
+                    for j in val[i]:
                         tax += float(val[i][j])
         grand_total = float(subtotal) + float(tax)
         context = {
             'subtotal': subtotal,
-            'tax_dict': tax_dict,
+            'tax_dict': tax_dict, 
             'grand_total': grand_total,
         }
         return context
