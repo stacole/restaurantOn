@@ -30,6 +30,7 @@ def place_order(request):
     k = {}
     for i in cart_menus:
         menu = MenuRestaurant.objects.get(pk=i.menu.id, vendor_id__in=vendors_ids)
+        # print(menu, menu.vendor.id)
         v_id = menu.vendor.id
         if v_id in k:
             subtotal = k[v_id]
@@ -39,7 +40,7 @@ def place_order(request):
             subtotal = (menu.price * i.quantity)
             k[v_id] = subtotal
 
-        # Calcular los datos de impuestos
+        # Calcular tax_data
         total_data = {}
         tax_dict = {}
         for i in get_tax:
@@ -47,9 +48,11 @@ def place_order(request):
             tax_percentage = i.tax_percentage
             tax_amount = round((tax_percentage * subtotal)/100, 2)
             tax_dict.update({tax_type: {str(tax_percentage) : str(tax_amount)}})
+        
         # construct total data
         # {"vendor_id":{"subtotal":{"tax_type": {"tax_percentage": "tax_amount"}}}}
         total_data.update({menu.vendor.id: {str(subtotal): str(tax_dict)}})
+    print(total_data)
 
 
         # tax = sum(x for key in tax_dict.values() for x in key.values())

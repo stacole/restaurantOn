@@ -51,8 +51,8 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=25)
     status = models.CharField(max_length=15, choices=STATUS, default='New')
     is_ordered = models.BooleanField(default=False)
-    table = models.IntegerField(blank=True, null=True)
-    bracelet = models.CharField(max_length=150, blank=True, null=True)
+    # table = models.IntegerField(blank=True, null=True)
+    # bracelet = models.CharField(max_length=150, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -80,12 +80,16 @@ class Order(models.Model):
                 val = json.loads(val)
                 tax_dict.update(val)
 
-                # calculate tax
-                # {'CGST': {'9.00': '6.03'}, 'SGST': {'7.00': '4.69'}}
+                # calcular tax
+                # {'iva': {'9.00': '6.03'}, 'paypal': {'7.00': '4.69'}}
                 for i in val:
                     for j in val[i]:
                         tax += float(val[i][j])
         grand_total = float(subtotal) + float(tax)
+        # print("subtotal==>", subtotal)
+        # print("tax==>", tax)
+        # print("tax_dict==>", tax_dict)
+        # print("grand_total==>", grand_total)
         context = {
             'subtotal': subtotal,
             'tax_dict': tax_dict, 

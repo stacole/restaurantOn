@@ -31,6 +31,15 @@
 
 	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
+	<!-- Paginación de tabla en resultados https://datatables.net/ -->
+	<link rel="stylesheet" href="//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+	<script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready( function () {
+			$('#myOrdersTable').DataTable();
+		} );
+	</script>
+
 	{% if '/' == request.path or 'profile' in request.path %}
 	<script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" defer></script>
 	{% endif %}
