@@ -5,10 +5,11 @@ from menu.models import MenuRestaurant
 from .forms import OrderForm
 from .models import Order, OrderedMenu, Payment
 import simplejson as json
-from .utils import generate_order_number
+from .utils import generate_order_number, order_total_by_vendor
 from django.http import HttpResponse, JsonResponse
 from accounts.utils import send_notification
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 
 # Create your views here.
 
@@ -20,13 +21,16 @@ def place_order(request):
         return redirect('marketplace')
 
     vendors_ids = []
+    
     for i in cart_menus:
         if i.menu.vendor.id not in vendors_ids:
             vendors_ids.append(i.menu.vendor.id)
+     
     
     # Esta función es de context_proccessors
     get_tax = Tax.objects.filter(is_active=True)
     subtotal = 0
+    total_data = {}
     k = {}
     for i in cart_menus:
         menu = MenuRestaurant.objects.get(pk=i.menu.id, vendor_id__in=vendors_ids)
@@ -41,14 +45,14 @@ def place_order(request):
             k[v_id] = subtotal
 
         # Calcular tax_data
-        total_data = {}
+        # total_data = {}
         tax_dict = {}
         for i in get_tax:
             tax_type = i.tax_type
             tax_percentage = i.tax_percentage
             tax_amount = round((tax_percentage * subtotal)/100, 2)
             tax_dict.update({tax_type: {str(tax_percentage) : str(tax_amount)}})
-        
+        # print(tax_dict)
         # construct total data
         # {"vendor_id":{"subtotal":{"tax_type": {"tax_percentage": "tax_amount"}}}}
         total_data.update({menu.vendor.id: {str(subtotal): str(tax_dict)}})
@@ -136,26 +140,45 @@ def payments(request):
         # Enviar correo electrónico de confirmación de pedido a CUSTOMER
         mail_subject = 'Thanks for enjoy the best restaurant in Riviera Maya'
         mail_template = 'orders/order_confirmation_email.html'
+
+        ordered_menu = OrderedMenu.objects.filter(order=order)
+        customer_subtotal = 0
+        for item in ordered_menu:
+            customer_subtotal += (item.price * item.quantity)
+        tax_data = json.loads(order.tax_data)
         context = {
             'user': request.user,
             'order': order,
             'to_email': order.email,
+            'ordered_menu': ordered_menu,
+            'domain': get_current_site(request),
+            'customer_subtotal': customer_subtotal,
+            'tax_data': tax_data,
         }
         send_notification(mail_subject, mail_template, context)
         
         # Enviar correo electrónico de pedido recibido a VENDOR
         mail_subject = 'You are received a new order.'
         mail_template = 'orders/new_order_received.html'
+
+        ordered_menu = OrderedMenu.objects.filter(order=order)
         to_emails = []
         for i in cart_menus:
             if i.menu.vendor.user.email not in to_emails: # Condicional para que no se repipta el correo enviado a vendor cuando es mas de una orden
                 to_emails.append(i.menu.vendor.user.email) # de marketplace.models.cart {menu} el modelo foreingkey vendor, user
-        print('to_emails=>', to_emails)
-        context = {
-            'order': order,
-            'to_email':to_emails
-        }
-        send_notification(mail_subject, mail_template, context)
+
+                ordered_menu_to_vendor = OrderedMenu.objects.filter(order=order, menuitem__vendor=i.menu.vendor)
+                print(ordered_menu_to_vendor)
+
+                context = {
+                    'order': order,
+                    'to_email': i.menu.vendor.user.email,
+                    'ordered_menu_to_vendor': ordered_menu_to_vendor,
+                    'vendor_subtotal': order_total_by_vendor(order, i.menu.vendor.id)['subtotal'],
+                    'tax_data': order_total_by_vendor(order, i.menu.vendor.id)['tax_dict'],
+                    'vendor_grand_total': order_total_by_vendor(order, i.menu.vendor.id)['grand_total'],
+                }
+                send_notification(mail_subject, mail_template, context)
         
         # Borrar el carrito si el pago es éxitoso
         cart_menus.delete()

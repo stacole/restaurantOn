@@ -20,6 +20,7 @@ from django.template.defaultfilters import slugify
 
 def get_vendor(request):
     vendor = Vendor.objects.get(user=request.user)
+    print(vendor)
     return vendor
 
 @login_required(login_url='login')
@@ -241,7 +242,8 @@ def order_detail(request, order_number):
     try:
         order = Order.objects.get(order_number=order_number, is_ordered=True)
         ordered_menu = OrderedMenu.objects.filter(order=order, menuitem__vendor=get_vendor(request)) #Función get_vendor al principio de esta página
-        
+        # print(order)
+        # print(ordered_menu)
         context = {
             'order': order,
             'ordered_menu': ordered_menu,

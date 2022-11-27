@@ -33,7 +33,7 @@ class Order(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
-    vendors = models.ManyToManyField(Vendor, blank=True)
+    vendors = models.ManyToManyField(Vendor, blank=True, verbose_name="Restaurant")
     order_number = models.CharField(max_length=20)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -51,8 +51,8 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=25)
     status = models.CharField(max_length=15, choices=STATUS, default='New')
     is_ordered = models.BooleanField(default=False)
-    # table = models.IntegerField(blank=True, null=True)
-    # bracelet = models.CharField(max_length=150, blank=True, null=True)
+    table = models.IntegerField(blank=True, null=True)
+    bracelet = models.CharField(max_length=150, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -61,19 +61,23 @@ class Order(models.Model):
     def name(self):
         return f'{self.first_name} {self.last_name}'
 
-    def order_placed_to(self):
+    def restaurant(self):
         return ", ".join([str(i) for i in self.vendors.all()])
 
     def get_total_by_vendor(self):
         # create custom middleware django documentación
         vendor = Vendor.objects.get(user=request_object.user)
+        print(vendor)
         
         subtotal = 0
         tax = 0
         tax_dict = {}
         if self.total_data: # revisar porque no funciona sin el None
             total_data = json.loads(self.total_data)
+            print(total_data)
             data = total_data.get(str(vendor.id))
+            # print(total_data)
+            print(data)
             for key, val in data.items():
                 subtotal += float(key)
                 val = val.replace("'", '"')
@@ -86,10 +90,6 @@ class Order(models.Model):
                     for j in val[i]:
                         tax += float(val[i][j])
         grand_total = float(subtotal) + float(tax)
-        # print("subtotal==>", subtotal)
-        # print("tax==>", tax)
-        # print("tax_dict==>", tax_dict)
-        # print("grand_total==>", grand_total)
         context = {
             'subtotal': subtotal,
             'tax_dict': tax_dict, 

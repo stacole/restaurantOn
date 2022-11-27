@@ -5,6 +5,7 @@ from django.db.models.fields.related import ForeignKey, OneToOneField
 
 from django.contrib.gis.db import models as gismodels
 from django.contrib.gis.geos import Point
+from django.db.models.functions import Lower
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -50,7 +51,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
-    email = models.CharField(max_length=100, unique=True,)
+    email = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=12, blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICE, blank=True, null=True)
 
@@ -71,7 +72,8 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
-        # return (self.email).lower
+        # return self.email.lower()
+        # return Lower(self.email)
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
@@ -106,6 +108,7 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.email
+        # return self.user.email.lower()
         # return (self.user.email).lower
 
     def save(self, *args, **kwargs):

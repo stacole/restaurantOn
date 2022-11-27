@@ -52,8 +52,8 @@ def registerUser(request):
             # Create de user using create_user method
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
+            username = form.cleaned_data['username'].lower()
+            email = form.cleaned_data['email'].lower()
             password = form.cleaned_data['password']
             user = User.objects.create_user(first_name=first_name, last_name=last_name,username=username, email=email, password=password) # from accounts.models.create_user
             user.role = User.CUSTOMER
@@ -87,8 +87,8 @@ def registerVendor(request):
         if form.is_valid() and v_form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
+            username = form.cleaned_data['username'].lower()
+            email = form.cleaned_data['email'].lower()
             password = form.cleaned_data['password']
             user = User.objects.create_user(first_name=first_name, last_name=last_name,username=username, email=email, password=password) 
             user.role = User.VENDOR #Vendor viene de accounts.models (1)
@@ -154,7 +154,7 @@ def login(request):
             messages.success(request, 'You are now logged in.')
             return redirect('myAccount')
         else:
-            messages.error(request, 'Invalid login credentials')
+            messages.error(request, 'Invalid login credentials, make sure you write in lower case.')
             return redirect('login')
     return render(request, 'accounts/login.html')
 
@@ -186,7 +186,7 @@ def customerDashboard(request):
 def vendorDashboard(request):
     vendor = Vendor.objects.get(user=request.user)
     orders = Order.objects.filter(vendors__in=[vendor.id], is_ordered=True).order_by('-created_at')
-    # print(orders)
+    
     recent_orders = orders[:10] # muestra la cantidad de ordenes en dashboard de vendor
 
     # Ventas del mes actual

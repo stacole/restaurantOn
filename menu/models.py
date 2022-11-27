@@ -34,7 +34,7 @@ class FoodItem(models.Model):
     food_title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(max_length=250, blank=True)
-    image = models.ImageField(upload_to='foodimages')
+    image = models.ImageField(upload_to='foodimages', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

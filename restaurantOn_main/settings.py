@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'customers',
     'orders',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -167,7 +168,7 @@ EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'restaurantOn Markeplace <jmcagogosarul@gmail.com>'
+DEFAULT_FROM_EMAIL = 'Thompson Restaurants <canth.noreply@thompsonhotels.com>'
 
 
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
