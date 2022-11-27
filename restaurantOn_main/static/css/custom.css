@@ -66,3 +66,61 @@ table > tbody > tr > td{
 .payment-method [type=radio]:checked + img{
     outline: 2px solid #ff0000;
 }
+@media only screen and (max-width: 480px) {
+    a.get-start-btn{
+        display: block;
+        margin-top: 15px !important;
+        margin-left: 0 !important;
+    }
+    .main-search-bar{
+        padding-top: 50px !important;
+        padding-bottom: 30px !important;
+    }
+    .user-dashboard{
+        width: 100% !important;
+    }
+    .menu-itam-holder .quantity{
+        right: 0 !important;
+        margin-top: -10px !important;
+    }
+    
+    .menu-itam-holder .text-holder{
+        float: right !important;
+        right: 0 !important;
+        margin-top: 0px !important;
+    }
+    .image-holderMenu{
+        height: 40px !important;
+        width: 5px !important;
+    }
+    .menu-itam-holder .menu-itam-list .image-holder{
+        margin-bottom: 75px;
+    }
+    .menu-itam-holder .menu-itam-list ul li{
+        border-bottom: none !important;
+    }
+    .table.opening_hours{
+        width: 100% !important;
+    }
+    .table td{
+        padding: 0.5rem !important;
+    }
+}
+.image-holderMenu{
+    height: 45px !important;
+    width: 30px !important;
+}
+.image-holderItem{
+    height: 45px !important;
+    width: 45px !important;
+}
+.text-holderItem{
+    text-shadow: #062a30;
+}
+/* Linea de la lista en marketplace vendor detail */
+.menu-itam-holder .menu-itam-list ul li{
+    border-bottom: none !important;
+}
+table td, table th{
+    line-height: 1rem !important;
+}

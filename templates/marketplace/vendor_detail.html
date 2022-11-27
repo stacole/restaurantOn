@@ -115,10 +115,10 @@
                                         
                                         {% for menu in menus %}
                                         <ul>
-                                            <li>
-                                                <div class="image-holder"><a href="{{ menu.image.url }}"> <img src="{{ menu.image.url }}" alt=""></a></div>
+                                            <li> 
+                                                <div class="image-holder image-holderMenu"><a href="{{ menu.image.url }}"> <img src="{{ menu.image.url }}" alt=""></a></div>
                                                 <div class="text-holder">
-                                                    <h6>{{ menu }}</h6>
+                                                    <h6 class="element-title text-color">{{ menu }}</h6>
                                                     <span>{{ menu.description }}</span>
                                                 </div>
                                                 <div class="price-holder">
@@ -139,15 +139,19 @@
                                         
                                             {% for food in menu.fooditems.all %}
                                             
-                                                <div class="image-holder"> <img src="{{ food.image.url }}" alt=""></div>
-                                                <div class="element-title" id="menu-category-2">
-                                                    <h5 class="text-color">{{ food }}</h5>
+                                                <div class="image-holder image-holderItem"> 
+                                                    <a href="{{ food.image.url }}">
+                                                        <img src="{{ food.image.url }}" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="text-holder" id="menu-category-2">
+                                                    <h5 class="text-holder">{{ food }}</h5>
                                                     <span>{{ food.description }}</span>
                                                 </div>
                                             
                                             
                                             {% endfor %}
-                                            
+                                            <hr>
                                        
                                         {% endfor %}
                                     </div>
@@ -159,7 +163,6 @@
                                     {% if user.is_authenticated %}
                                     <br>
                                     <br>
-                                    
                                     <a href="{% url 'cart' %}">
                                         <i class="fa fa-shopping-cart text-danger" style="font-size: 20px"></i>
                                         <span class="badge badge-warning" id="cart_counter" >
