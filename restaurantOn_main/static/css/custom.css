@@ -105,6 +105,9 @@ table > tbody > tr > td{
     .table td{
         padding: 0.5rem !important;
     }
+    .menu-itam-holder .menu-itam-list .image-holder img{
+        max-width: 60% !important;
+    }
 }
 .image-holderMenu{
     height: 45px !important;
@@ -123,4 +126,8 @@ table > tbody > tr > td{
 }
 table td, table th{
     line-height: 1rem !important;
+}
+/* Imagen cart */
+.menu-itam-holder .menu-itam-list .image-holder img{
+    max-width: 60% !important;
 }

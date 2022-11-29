@@ -14,6 +14,8 @@ class OrderedMenuAdmin(admin.ModelAdmin):
 
 class OrderAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ['order_number', 'payment', 'name', 'phone_number', 'email', 'country', 'state', 'city', 'pin_code', 'total', 'payment_method', 'status', 'bracelet', 'table', 'restaurant', 'is_ordered', 'created_at']
+    search_fields = ['order_number', 'last_name']
+    list_filter = ('vendors', 'status', 'is_ordered')
     # readonly_fields = ['order_number', 'name', 'phone_number', 'email', 'total', 'payment_method', 'status', 'order_placed_to', 'is_ordered']
     inlines = [OrderedMenuInline]
     list_editable = ['bracelet', 'table']
