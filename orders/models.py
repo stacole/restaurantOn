@@ -23,6 +23,10 @@ class Payment(models.Model):
     def __str__(self):
         return self.transaction_id
 
+# class Brazalets(models.Model):
+#     number = models.IntegerField()
+#     detail = models.CharField(null=True, blank=True)
+
 class Order(models.Model):
     STATUS = (
         ('New', 'New'),
@@ -53,6 +57,7 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     table = models.IntegerField(blank=True, null=True)
     bracelet = models.CharField(max_length=150, blank=True, null=True)
+    #bacelet = models.ForeignKey(Brazalets, blank=True, on_delete=models.CASCADE, null=True, max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -122,3 +127,5 @@ class OrderedMenu(models.Model):
     def __str__(self):
         #  str() 
         return self.menuitem.menu_name
+
+

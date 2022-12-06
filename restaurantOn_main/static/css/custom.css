@@ -131,3 +131,9 @@ table td, table th{
 .menu-itam-holder .menu-itam-list .image-holder img{
     max-width: 60% !important;
 }
+h5, h5 a {
+    font: Normal 12px/12px "Montserrat", sans-serif !important;
+}
+.menu-itam-holder .menu-itam-list .text-holder span {
+    font-size: 10px;
+}

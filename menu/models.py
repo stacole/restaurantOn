@@ -31,10 +31,10 @@ class FoodItem(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     # menu = models.ForeignKey(MenuRestaurant, on_delete=models.CASCADE, related_name='fooditems')
     menu = models.ForeignKey(MenuRestaurant, on_delete=models.CASCADE, related_name='fooditems')
-    food_title = models.CharField(max_length=50)
+    food_title = models.CharField(max_length=150)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(max_length=250, blank=True)
-    image = models.ImageField(upload_to='foodimages', blank=True)
+    image = models.ImageField(upload_to='foodimages', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

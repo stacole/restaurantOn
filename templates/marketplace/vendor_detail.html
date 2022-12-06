@@ -104,7 +104,7 @@
                 <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                     <div class="tabs-holder horizontal">
                         <ul class="stickynav-tabs nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#home"><i class="icon- icon-room_service"></i>Menu</a></li>
+                            <li class="active"><a data-toggle="tab" href="#home"><i class="icon- icon-room_service"></i>Options</a></li>
                             
                         </ul>
                         <div class="tab-content">
@@ -122,26 +122,37 @@
                                                     <span>{{ menu.description }}</span>
                                                 </div>
                                                 <div class="price-holder">
+                                                    {% if request.path == "/marketplace/alessia-4/" %}
+                                                    <div>
+                                                        Please contact
+                                                        <a href="https://api.whatsapp.com/send/?phone=529842182214">9842182214
+                                                            <i class="fa fa-whatsapp" aria-hidden="true" style="margin: 0 0 0 0px;"></i>
+                                                        </a>for availability.
+                                                    </div>
+                                                    {% else %}
                                                     <span class="price">${{ menu.price }}</span>
                                             
-                                                    <a href="#" class="decrease_cart" data-id="{{ menu.id }}" data-url="{% url 'decrease_cart' menu.id %}" style="margin-right: 28px;">
+                                                    <a href="#" class="decrease_cart" data-id="{{ menu.id }}" data-url="{% url 'decrease_cart' menu.id %}" style="margin-right: 14px;">
                                                         <i class="icon-minus text-color"></i>
                                                     </a>
-                                                    <label id="qty-{{menu.id}}">0</label>
+                                                    <label id="qty-{{menu.id}}" style="margin-right: -3px;">0</label>
                                                     <a href="#" class="add_to_cart" data-id="{{ menu.id }}" data-url="{% url 'add_to_cart' menu.id %}">
                                                         <i class="icon-plus4 text-color"></i>
                                                     </a>
+                                                    {% endif %}
                                                     
                                                 </div>
                                             </li>
-                                            
+                                        
                                         </ul>
+                                       
                                         
                                             {% for food in menu.fooditems.all %}
                                             
+                                                
                                                 <div class="image-holder image-holderItem"> 
                                                     <a href="{{ food.image.url }}">
-                                                        <img src="{{ food.image.url }}" alt="">
+                                                        <img src="{{ food.image.url }}">
                                                     </a>
                                                 </div>
                                                 <div class="text-holder" id="menu-category-2">
@@ -152,8 +163,8 @@
                                             
                                             {% endfor %}
                                             <hr>
-                                       
                                         {% endfor %}
+                                        
                                     </div>
                                     {% for item in cart_items %}
                                     
