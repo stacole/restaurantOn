@@ -187,7 +187,7 @@ def vendorDashboard(request):
     vendor = Vendor.objects.get(user=request.user)
     orders = Order.objects.filter(vendors__in=[vendor.id], is_ordered=True).order_by('-created_at')
     
-    recent_orders = orders[:10] # muestra la cantidad de ordenes en dashboard de vendor
+    recent_orders = orders[:3] # muestra la cantidad de ordenes en dashboard de vendor
 
     # Ventas del mes actual
     current_month= datetime.datetime.now().month
